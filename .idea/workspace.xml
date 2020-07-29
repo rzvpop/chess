@@ -1,7 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="ebd1cc71-bd59-4d10-83b8-ec9042668f98" name="Default Changelist" comment="" />
+    <list default="true" id="ebd1cc71-bd59-4d10-83b8-ec9042668f98" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/ChessPiece.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MoveContext.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Table.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/bishopb.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/bishopw.PNG" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/kingb.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/kingw.PNG" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/knightb.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/knightw.PNG" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/pawnb.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/pawnw.PNG" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/queenb.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/queenw.PNG" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/rookb.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/images/rookw.PNG" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/style.css" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -11,12 +49,16 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="HTML File" />
-        <option value="JavaScript File" />
         <option value="CSS File" />
+        <option value="JavaScript File" />
       </list>
     </option>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="ProjectId" id="1fJIW3H34wNapMF5quthVPzajeL" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -25,7 +67,17 @@
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/iamges" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\user\WebstormProjects\chess" />
+      <recent name="C:\Users\user\WebstormProjects\chess\context" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\user\WebstormProjects\chess\iamges" />
+    </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -35,11 +87,41 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1595929796626</updated>
-      <workItem from="1595929797681" duration="7546000" />
+      <workItem from="1595929797681" duration="7855000" />
+      <workItem from="1596002939902" duration="21250000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="765" y="236" key="#com.intellij.ide.util.MemberChooser" timestamp="1596027983429">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="765" y="236" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1596027983429" />
+    <state x="838" y="418" key="Github.ShareDialog" timestamp="1595940263403">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="838" y="418" key="Github.ShareDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1595940263403" />
+    <state x="786" y="224" key="Github.UntrackedFilesDialog" timestamp="1595940268882">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="786" y="224" key="Github.UntrackedFilesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1595940268882" />
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1596003517533">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1596003517533" />
   </component>
 </project>
