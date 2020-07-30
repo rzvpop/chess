@@ -3,6 +3,20 @@ body {
     font-size: 15px;
 }
 
+.start-screen {
+    top: 0;
+    left: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #ffebcd;
+    text-align: center;
+    font-size: 10em;
+    color: rgba(0, 0, 0, 0);
+    z-index: 1;
+    animation: blink 1s;
+}
+
 .chess-table {
     position: relative;
     display: grid;
@@ -19,22 +33,26 @@ body {
     background-color: #faebd7;
     width: 100%;
     height: 100%;
+    border: 1px solid #faebd7;
 }
 
 .brown-square {
     background-color: #d2691e;
     width: 100%;
     height: 100%;
+    border: 1px solid #d2691e;
 }
 
 .piece {
     width: 100%;
     height: 100%;
-    font-size: 5.7em;
+    font-size: 5.5em;
     text-align: center;
+    cursor: pointer;
+    user-select: none;
 }
 
-.hoverPiece {
+.select-piece {
     background-color: #77ff77;
     box-shadow: 0 0 100px #44aa44;
 }
@@ -43,10 +61,16 @@ body {
     background-color: #ff0000;
 }
 
-.takeOut {
+.can-capture {
     background-color: #ffcc00;
 }
 
-.moveAlternative {
+.move-alternative {
     background-color: #44aa44;
+    border: 1px solid #77ff77;
+}
+
+@keyframes blink {
+    from {color: #b8860b}
+    to {color: rgba(255, 255, 0, 0)}
 }

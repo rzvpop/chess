@@ -24,28 +24,28 @@ class Pawn extends ChessPiece {
 
     constructor(color) {
         super(color);
-        this._first = false;
+        this._firstDone = false;
         this._enPassant = false;
+    }
+
+    get enPassant() {
+        return this._enPassant;
+    }
+
+    set enPassant(value) {
+        this._enPassant = value;
     }
 
     getMoveContext() {
         return Pawn._moveContext;
     }
 
-    get moveContext() {
-        return ChessPiece._moveContext;
+    get firstDone() {
+        return this._firstDone;
     }
 
-    set moveContext(value) {
-        ChessPiece._moveContext = value;
-    }
-
-    get first() {
-        return this._first;
-    }
-
-    set first(value) {
-        this._first = value;
+    set firstDone(value) {
+        this._firstDone = value;
     }
 
     generatePieceDiv() {
@@ -62,9 +62,15 @@ class Pawn extends ChessPiece {
 }
 
 class King extends ChessPiece {
+    static _moveContext = KingMoveContext;
+
     constructor(color) {
         super(color);
         this.moveContext = {};
+    }
+
+    getMoveContext() {
+        return King._moveContext;
     }
 
     generatePieceDiv() {
@@ -81,9 +87,14 @@ class King extends ChessPiece {
 }
 
 class Queen extends ChessPiece {
+    static _moveContext = QueenMoveContext;
+
     constructor(color) {
         super(color);
-        this.moveContext = {};
+    }
+
+    getMoveContext() {
+        return Queen._moveContext;
     }
 
     generatePieceDiv() {
@@ -100,9 +111,15 @@ class Queen extends ChessPiece {
 }
 
 class Bishop extends ChessPiece {
+    static _moveContext = BishopMoveContext;
+
     constructor(color) {
         super(color);
         this.moveContext = {};
+    }
+
+    getMoveContext() {
+        return Bishop._moveContext;
     }
 
     generatePieceDiv() {
@@ -119,9 +136,15 @@ class Bishop extends ChessPiece {
 }
 
 class Knight extends ChessPiece {
+    static _moveContext = KnightMoveContext;
+
     constructor(color) {
         super(color);
         this.moveContext = {};
+    }
+
+    getMoveContext() {
+        return Knight._moveContext;
     }
 
     generatePieceDiv() {
@@ -138,9 +161,15 @@ class Knight extends ChessPiece {
 }
 
 class Rook extends ChessPiece {
+    static _moveContext = RookMoveContext;
+
     constructor(color) {
         super(color);
         this.moveContext = {};
+    }
+
+    getMoveContext() {
+        return Rook._moveContext;
     }
 
     generatePieceDiv() {
