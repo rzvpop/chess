@@ -5,6 +5,7 @@ class Table {
         this.table = null;
         this._pieces = [[null], [null], [null], [null], [null], [null], [null], [null], [null]];
         this._selected = null;
+        // this._turn = "white";
     }
 
     get pieces() {
@@ -13,6 +14,14 @@ class Table {
 
     set pieces(value) {
         this._pieces = value;
+    }
+
+    get selected() {
+        return this._selected;
+    }
+
+    set selected(value) {
+        this._selected = value;
     }
 
     /**
@@ -40,7 +49,7 @@ class Table {
                     square.style.gridRow = i + " / " + (i + 1);
                     square.style.gridColumn = j + " / " + (j + 1);
                     square.addEventListener("click", (event) => {
-                        this._highlightAlternatives(i, j);
+                        this._moveFlow(i, j);
                     });
 
                     this._pieces[i].push(null);
@@ -92,7 +101,7 @@ class Table {
 
     chooseMove(row, column) {
         if (this._selected) {
-            if (this._selected.moveSet.find(move => move.row === row && move.column === column)) {
+            if (this._selected.moveSet.find(move => move.row === row && move.column === column && !move.isKing)) {
                 this.movePiece(this._selected.row, this._selected.column, row, column);
                 return true;
             }
@@ -100,16 +109,17 @@ class Table {
         return false;
     }
 
-    // move choice also here
-    _highlightAlternatives(row, column) {
+    // see alternatives, choose move, see if in check
+    _moveFlow(row, column) {
         const currentSquare = this._getSquareByCoordinates(row, column);
 
         if (currentSquare.hasChildNodes() && !this._selected) {
-            this._noSelectedCase(row, column, currentSquare);
+            this._highlightAlternatives(row, column, currentSquare);
         }
         else {
             if(this._selected && (row !== this._selected.row || column !== this._selected.column)) {
                 this.chooseMove(row, column);
+                this._highlightCheck(row, column);
             }
 
             this._cleanHighlight();
@@ -118,19 +128,44 @@ class Table {
 
     }
 
-    _noSelectedCase(row, column, currentSquare) {
+    _highlightAlternatives(row, column, currentSquare) {
         this._cleanHighlight();
         currentSquare.classList.add("select-piece");
 
         const moveSet = this._pieces[row][column].getMoveContext().generateAlternatives(this, row, column);
         moveSet.forEach(move => {
-            if (move.canCapture)
-                this._getSquareByCoordinates(move.row, move.column).classList.add("can-capture");
-            else
-                this._getSquareByCoordinates(move.row, move.column).classList.add("move-alternative");
+            if(!move.isKing)
+                if (move.canCapture)
+                    this._getSquareByCoordinates(move.row, move.column).classList.add("can-capture");
+                else
+                    this._getSquareByCoordinates(move.row, move.column).classList.add("move-alternative");
         });
 
         this._selected = {row: row, column: column, moveSet: moveSet};
+    }
+
+    _highlightCheck(row, column) {
+        let foundKing = false;
+
+        for(let i = 1; i <= 8; ++i)
+            for(let j = 1; j <= 8; ++j) {
+                const piece = this._pieces[i][j];
+                if(piece !== null) {
+                    const moveSet = piece.getMoveContext().generateAlternatives(this, row, column);
+                    moveSet.forEach(move => {
+                        if (move.isKing) {
+                            this._getSquareByCoordinates(move.row, move.column).classList.add("check");
+                            foundKing = true;
+                        }
+                    });
+                }
+            }
+
+        if(!foundKing) {
+            for (let i = 0; i < this.table.children.length; ++i) {
+                this.table.children[i].classList.remove("check");
+            }
+        }
     }
 
     _cleanHighlight() {

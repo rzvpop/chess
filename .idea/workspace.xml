@@ -19,21 +19,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ebd1cc71-bd59-4d10-83b8-ec9042668f98" name="Default Changelist" comment="added all types of pieces(basic), pawn logic(in progress), move alternatives highlight(in progress)">
-      <change afterPath="$PROJECT_DIR$/images/bishopb.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/bishopw.PNG" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/kingb.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/kingw.PNG" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/knightb.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/knightw.PNG" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/pawnb.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/pawnw.PNG" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/queenb.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/queenw.PNG" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/rookb.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/rookw.PNG" afterDir="false" />
+    <list default="true" id="ebd1cc71-bd59-4d10-83b8-ec9042668f98" name="Default Changelist" comment="added start screen, move context for king and queen, capture class works, can move and capture">
+      <change afterPath="$PROJECT_DIR$/TableUI.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ChessPiece.js" beforeDir="false" afterPath="$PROJECT_DIR$/ChessPiece.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MoveContext.js" beforeDir="false" afterPath="$PROJECT_DIR$/MoveContext.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Table.js" beforeDir="false" afterPath="$PROJECT_DIR$/Table.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
@@ -71,12 +59,12 @@
     <property name="list.type.of.created.stylesheet" value="CSS" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\user\WebstormProjects\chess\iamges" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\user\WebstormProjects\chess" />
       <recent name="C:\Users\user\WebstormProjects\chess\context" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\user\WebstormProjects\chess\iamges" />
     </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -90,7 +78,8 @@
       <workItem from="1595929797681" duration="7855000" />
       <workItem from="1596002939902" duration="21250000" />
       <workItem from="1596028208099" duration="173000" />
-      <workItem from="1596089338382" duration="19496000" />
+      <workItem from="1596089338382" duration="20440000" />
+      <workItem from="1596175606480" duration="16805000" />
     </task>
     <task id="LOCAL-00001" summary="added all types of pieces(basic), pawn logic(in progress), move alternatives highlight(in progress)">
       <created>1596028360888</created>
@@ -99,7 +88,14 @@
       <option name="project" value="LOCAL" />
       <updated>1596028360888</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="added start screen, move context for king and queen, capture class works, can move and capture">
+      <created>1596110658447</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1596110658447</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -119,13 +115,14 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="added all types of pieces(basic), pawn logic(in progress), move alternatives highlight(in progress)" />
-    <option name="LAST_COMMIT_MESSAGE" value="added all types of pieces(basic), pawn logic(in progress), move alternatives highlight(in progress)" />
+    <MESSAGE value="added start screen, move context for king and queen, capture class works, can move and capture" />
+    <option name="LAST_COMMIT_MESSAGE" value="added start screen, move context for king and queen, capture class works, can move and capture" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="765" y="236" key="#com.intellij.ide.util.MemberChooser" timestamp="1596091204732">
+    <state x="765" y="236" key="#com.intellij.ide.util.MemberChooser" timestamp="1596179246085">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="765" y="236" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1596091204732" />
+    <state x="765" y="236" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1596179246085" />
     <state x="838" y="418" key="Github.ShareDialog" timestamp="1595940263403">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -134,10 +131,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="786" y="224" key="Github.UntrackedFilesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1595940268882" />
-    <state x="552" y="253" key="Vcs.Push.Dialog.v2" timestamp="1596028371717">
+    <state x="552" y="253" key="Vcs.Push.Dialog.v2" timestamp="1596110669868">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="552" y="253" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1596028371717" />
+    <state x="552" y="253" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1596110669868" />
     <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1596003517533">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

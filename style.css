@@ -63,11 +63,13 @@ body {
 
 .can-capture {
     background-color: #ffcc00;
+    cursor: pointer;
 }
 
 .move-alternative {
     background-color: #44aa44;
     border: 1px solid #77ff77;
+    cursor: pointer;
 }
 
 @keyframes blink {
