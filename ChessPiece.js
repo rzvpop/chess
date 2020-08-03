@@ -49,15 +49,7 @@ class Pawn extends ChessPiece {
     }
 
     generatePieceDiv() {
-        const piece = document.createElement("div");
-        piece.classList.add("piece");
-
-        if(this.color === "white")
-            piece.innerHTML = "&#x2659;";
-        else
-            piece.innerHTML = "&#x265F;";
-
-        return piece;
+        return $("<div/>").addClass("piece").html(this.color === "white" ? "&#x2659;" : "&#x265F;");
     }
 }
 
@@ -74,15 +66,7 @@ class King extends ChessPiece {
     }
 
     generatePieceDiv() {
-        const piece = document.createElement("div");
-        piece.classList.add("piece");
-
-        if(this.color === "white")
-            piece.innerHTML = "&#x2654;";
-        else
-            piece.innerHTML = "&#x265A;";
-
-        return piece;
+        return $("<div/>").addClass("piece").html(this.color === "white" ? "&#x2654;" : "&#x265A;");
     }
 }
 
@@ -98,15 +82,7 @@ class Queen extends ChessPiece {
     }
 
     generatePieceDiv() {
-        const piece = document.createElement("div");
-        piece.classList.add("piece");
-
-        if(this.color === "white")
-            piece.innerHTML = "&#x2655;";
-        else
-            piece.innerHTML = "&#x265B;";
-
-        return piece;
+        return $("<div/>").addClass("piece").html(this.color === "white" ? "&#x2655;" : "&#x265B;");
     }
 }
 
@@ -123,15 +99,7 @@ class Bishop extends ChessPiece {
     }
 
     generatePieceDiv() {
-        const piece = document.createElement("div");
-        piece.classList.add("piece");
-
-        if(this.color === "white")
-            piece.innerHTML = "&#x2657;";
-        else
-            piece.innerHTML = "&#x265D;";
-
-        return piece;
+        return $("<div/>").addClass("piece").html(this.color === "white" ? "&#x2657;" : "&#x265D;");
     }
 }
 
@@ -148,15 +116,7 @@ class Knight extends ChessPiece {
     }
 
     generatePieceDiv() {
-        const piece = document.createElement("div");
-        piece.classList.add("piece");
-
-        if(this.color === "white")
-            piece.innerHTML = "&#x2658;";
-        else
-            piece.innerHTML = "&#x265E;";
-
-        return piece;
+        return $("<div/>").addClass("piece").html(this.color === "white" ? "&#x2658;" : "&#x265E;");
     }
 }
 
@@ -173,14 +133,6 @@ class Rook extends ChessPiece {
     }
 
     generatePieceDiv() {
-        const piece = document.createElement("div");
-        piece.classList.add("piece");
-
-        if(this.color === "white")
-            piece.innerHTML = "&#x2656;";
-        else
-            piece.innerHTML = "&#x265C;";
-
-        return piece;
+        return $("<div/>").addClass("piece").html(this.color === "white" ? "&#x2656;" : "&#x265C;");
     }
 }

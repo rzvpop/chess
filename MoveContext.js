@@ -11,6 +11,7 @@ class MoveContext {
 }
 
 // king not to remain in check
+// 'isKing' property applies only when there is an opponent king; it overrides 'canCapture'
 
 class PawnMoveContext extends MoveContext {
     // en passant
