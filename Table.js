@@ -7,8 +7,6 @@ class Table {
         this._checkPositions = [[null], [null], [null], [null], [null], [null], [null], [null], [null]];
         this._selected = null;
         this._turn = "white";
-        this._blockedForWhiteKing = [];
-        this._blockedForBlackKing = [];
     }
 
     get pieces() {
@@ -100,9 +98,6 @@ class Table {
 
     chooseMove(row, column) {
         if (this._selected) {
-            // if(this._pieces[this._selected.row][this._selected.column].constructor.name === "King") {
-            //     this._selected.moveSet = this._selected.moveSet.filter(move => !this._checkPositions[move.row][move.column] === this._pieces[this._selected.row][this._selected.column].color);
-            // }
             if (this._selected.moveSet.find(move => move.row === row && move.column === column && !move.isKing)) {
                 this.movePiece(this._selected.row, this._selected.column, row, column);
                 this._turn = this._turn === "white" ? "black" : "white";

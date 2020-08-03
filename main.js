@@ -8,14 +8,12 @@ $(document).ready(function(){
     //     if(cnt === -1)
     //     {
     //         clearInterval(interval);
-    //         $startScreen.remove().after(() => {
-    //             table.generateTable($("body"));
-    //         });
+            setupTable();
     //     }
     //
     // }, 1000);
 
-    setupTable();
+
 });
 
 const setupTable = () => {
