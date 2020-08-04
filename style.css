@@ -29,18 +29,18 @@ body {
     justify-items: center;
 }
 
-.white-square {
-    background-color: #faebd7;
+.square {
     width: 100%;
     height: 100%;
     border: 1px solid #faebd7;
 }
 
+.white-square {
+    background-color: #faebd7;
+}
+
 .brown-square {
     background-color: #d2691e;
-    width: 100%;
-    height: 100%;
-    border: 1px solid #d2691e;
 }
 
 .piece {

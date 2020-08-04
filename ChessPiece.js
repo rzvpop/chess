@@ -1,3 +1,5 @@
+// refactor: add coordinates
+
 class ChessPiece {
     constructor(color) {
         if (this.constructor.name === "ChessPiece") {

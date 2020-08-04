@@ -8,16 +8,23 @@ $(document).ready(function(){
     //     if(cnt === -1)
     //     {
     //         clearInterval(interval);
-            setupTable();
+            const table = setupTable(history);
     //     }
     //
     // }, 1000);
 
-
+    $(window).on("unload", (event) => {
+        localStorage.moveHistory = JSON.stringify(table.moveHistory);
+    });
 });
 
 const setupTable = () => {
-    const table = new Table();
+    let history;
+    if(localStorage.moveHistory) {
+        history = JSON.parse(localStorage.moveHistory);
+    }
+
+    const table = new Table(history);
     table.generateTable($("body"));
 
     for(let i = 0; i < 8; ++i) {
@@ -64,4 +71,6 @@ const setupTable = () => {
     table.addPiece(1, 1, rookW1)
     const rookW2 = new Rook("white");
     table.addPiece(1, 8, rookW2);
+
+    return table;
 };

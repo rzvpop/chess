@@ -1,30 +1,27 @@
-// add square matrix?
-
 class Table {
-    constructor() {
+    constructor(history) {
         this.table = null;
         this._pieces = [[null], [null], [null], [null], [null], [null], [null], [null], [null]];
-        this._checkPositions = [[null], [null], [null], [null], [null], [null], [null], [null], [null]];
         this._selected = null;
-        this._turn = "white";
+        this._moveHistory = {moves: [], turn: "white"};
+        this._rebuildLastSetup(history);
     }
 
-    get pieces() {
-        return this._pieces;
+    get moveHistory() {
+        return this._moveHistory;
     }
 
-    set pieces(value) {
-        this._pieces = value;
+    _rebuildLastSetup(history) {
+        if(typeof history !== "undefined") {
+            this._moveHistory.moves.forEach(move => {
+                this.movePiece(move.rowStart, move.columnStart, move.rowEnd, move.columnEnd);
+            });
+        }
     }
 
     get selected() {
         return this._selected;
     }
-
-    set selected(value) {
-        this._selected = value;
-    }
-
     /**
      *
      * @param row
@@ -32,6 +29,7 @@ class Table {
      * @returns {Element}
      * @private
      */
+    // return $(".square[data-i=" + (row - 1) + ", data-j" + (column - 1) + "]").first();//[8 * (row - 1) + (column - 1)]); - change
     _getSquareByCoordinates(row, column) {
         return $($(this.table).children()[8 * (row - 1) + (column - 1)]);
     }
@@ -40,15 +38,17 @@ class Table {
         if (this.table !== null) {
             for (let i = 1; i <= 8; ++i) {
                 for (let j = 1; j <= 8; ++j) {
-                    this.table.append($("<div/>").addClass(((i + j) % 2 === 0) ? "white-square" : "brown-square")
+                    this.table.append($("<div/>").addClass("square").addClass(((i + j) % 2 === 0) ? "white-square" : "brown-square")
+                            .attr("data-i", i)
+                            .attr("data-j", j)
                             .css("grid-row", i + " / " + (i + 1))
                             .css("grid-column", j + " / " + (j + 1))
                             .click((event) => {
-                                    this._moveFlow(i, j);
+                                const index = $(event.currentTarget).index();
+                                this._moveFlow(Math.floor(index / 8) + 1, index % 8 + 1);
                             }));
 
                     this._pieces[i].push(null);
-                    this._checkPositions[i].push(null);
                 }
             }
         }
@@ -70,7 +70,7 @@ class Table {
         const $endSquareDiv = this._getSquareByCoordinates(rowEnd, columnEnd);
 
         if (typeof piece !== "undefined" && piece !== null) {
-            const moveSet = piece.getMoveContext().generateAlternatives(this, rowStart, columnStart);
+            const moveSet = piece.getMoveContext().generateAlternatives(this._pieces, rowStart, columnStart);
 
             if (moveSet.find(square => square.row === rowEnd && square.column === columnEnd)) {
                 if (endPiece !== null) {
@@ -86,6 +86,7 @@ class Table {
             this._pieces[rowEnd][columnEnd] = piece;
 
             if(piece.constructor.name === "Pawn") piece.firstDone = true;
+            this._moveHistory.moves.push({rowStart: rowStart, columnStart: columnStart, rowEnd: rowEnd, columnEnd: columnEnd});
         }
     }
 
@@ -93,30 +94,39 @@ class Table {
         this.table = $("<div/>").prependTo(element).addClass("chess-table");
         this._putSquares();
 
-        $("<div id='turn'/>").prependTo(element).html("<p>" + this._turn + "'s turn</p>")
+        $("<div id='turn'/>").prependTo(element).html("<p>" + this._moveHistory.turn + "'s turn</p>")
     }
 
-    chooseMove(row, column) {
+    _chooseMove(row, column) {
         if (this._selected) {
             if (this._selected.moveSet.find(move => move.row === row && move.column === column && !move.isKing)) {
                 this.movePiece(this._selected.row, this._selected.column, row, column);
-                this._turn = this._turn === "white" ? "black" : "white";
-                $("#turn").html("<p>" + this._turn + "'s turn</p>")
+                return true;
             }
         }
+        return false;
+    }
+
+    _changeTurn() {
+        this._moveHistory.turn = this._moveHistory.turn === "white" ? "black" : "white";
+        $("#turn").html("<p>" + this._moveHistory.turn + "'s turn</p>")
     }
 
     // see alternatives, choose move, see if in check
     _moveFlow(row, column) {
         const $currentSquare = this._getSquareByCoordinates(row, column);
 
-        if ($currentSquare.children().length > 0 && !this._selected && this._pieces[row][column].color === this._turn) {
+        if ($currentSquare.children().length > 0 && !this._selected && this._pieces[row][column].color === this._moveHistory.turn) {
             this._highlightAlternatives(row, column, $currentSquare);
         }
         else {
             if(this._selected && (row !== this._selected.row || column !== this._selected.column)) {
-                this.chooseMove(row, column);
-                this._highlightCheck(row, column);
+                const moved = this._chooseMove(row, column);
+
+                if(moved) {
+                    this._highlightCheck(row, column);
+                    this._changeTurn();
+                }
             }
 
             if(this.selected) {
@@ -124,17 +134,13 @@ class Table {
                 this._selected = null;
             }
         }
-
     }
 
     _highlightAlternatives(row, column, currentSquare) {
         this._cleanHighlight();
         $(currentSquare).addClass("select-piece");
 
-        let moveSet = this._pieces[row][column].getMoveContext().generateAlternatives(this, row, column);
-        if(this._pieces[row][column].constructor.name === "King") {
-            moveSet = moveSet.filter(move => this._checkPositions[move.row][move.column] !== this._pieces[row][column].color);
-        }
+        let moveSet = this._pieces[row][column].getMoveContext().generateAlternatives(this._pieces, row, column);
 
         moveSet.forEach(move => {
             if(!move.isKing)
@@ -153,16 +159,14 @@ class Table {
         for(let i = 1; i <= 8; ++i)
             for(let j = 1; j <= 8; ++j) {
                 const piece = this._pieces[i][j];
-                this._checkPositions[i][j] = null;
                 if(piece !== null) {
-                    const moveSet = piece.getMoveContext().generateAlternatives(this, i, j);
+                    const moveSet = piece.getMoveContext().generateAlternatives(this._pieces, i, j);
                     moveSet.forEach(move => {
-                        if (move.isKing) {
-                            this._getSquareByCoordinates(move.row, move.column).addClass("check");
-                            foundKing = true;
-                        }
-                        else {
-                            this._checkPositions[move.row][move.column] = this._pieces[i][j].color === "white" ? "black" : "white";
+                        if(piece.color === this._moveHistory.turn) {
+                            if (move.isKing) {
+                                this._getSquareByCoordinates(move.row, move.column).addClass("check");
+                                foundKing = true;
+                            }
                         }
                     });
                 }
