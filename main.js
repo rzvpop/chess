@@ -9,7 +9,8 @@ $(document).ready(function(){
     //     if(cnt === -1)
     //     {
     //         clearInterval(interval);
-            let table = setupTable(body);
+            const table = new Table();
+            setupTable(table, body);
     //     }
     //
     // }, 1000);
@@ -23,24 +24,33 @@ $(document).ready(function(){
         table.rebuildSetup();
     }
 
-    $("<div id='undo'/>").prependTo(body).html("<button>Undo</button>").addClass("undo");
-    $("<div id='reset'/>").prependTo(body).html("<button>Reset</button>").addClass("reset");
-    body.on('click', (event) => {
-        const element = $(event.target).is("button") ? $(event.target) : null;
-        if(element) {
-            if (element.parent().attr("id") === "reset") {
-                table.moveHistory = {moves: [], turn: "white"};
-                table = setupTable(body);
-            }
-            else if (element.parent().attr("id") === "undo") {
-
-            }
-        }
-    });
+    // getGame(6, table);
 });
 
-const setupTable = (element) => {
-    const table = new Table();
+const getGame = (id, table) => {
+    if(Number.isInteger(id)) {
+        $.ajax({
+            method: "GET",
+            url: "https://chess.thrive-dev.bitstoneint.com/wp-json/chess-api/game/" + id.toString(),
+        }).done(res => {
+            res.moves.forEach(move => {
+                if(typeof move === "object" && move !== null && move.hasOwnProperty("from") && move.hasOwnProperty("to")) {
+                    table.movePiece(Number.parseInt(move.from.x), Number.parseInt(move.from.y), Number.parseInt(move.to.x), Number.parseInt(move.to.y));
+                }
+            });
+        });
+    }
+    else {
+        $.ajax({
+            method: "GET",
+            url: "https://chess.thrive-dev.bitstoneint.com/wp-json/chess-api/game",
+        }).done(res => {
+            console.log(res);
+        });
+    }
+};
+
+const setupTable = (table, element) => {
     table.generateTable(element);
 
     for(let i = 0; i < 8; ++i) {
@@ -87,6 +97,21 @@ const setupTable = (element) => {
     table.addPiece(1, 1, rookW1)
     const rookW2 = new Rook("white");
     table.addPiece(1, 8, rookW2);
+
+    $("<div id='undo'/>").prependTo(element).html("<button>Undo</button>").addClass("undo");
+    $("<div id='reset'/>").prependTo(element).html("<button>Reset</button>").addClass("reset");
+    element.on('click', (event) => {
+        const element = $(event.target).is("button") ? $(event.target) : null;
+        if(element) {
+            if (element.parent().attr("id") === "reset") {
+                table.moveHistory = {moves: [], turn: "white"};
+                table = setupTable(table, element);
+            }
+            else if (element.parent().attr("id") === "undo") {
+
+            }
+        }
+    });
 
     return table;
 };
