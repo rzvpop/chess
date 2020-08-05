@@ -1,6 +1,7 @@
 body {
     font-family: Arial, sans-serif;
     font-size: 15px;
+    overflow: hidden;
 }
 
 .start-screen {
@@ -22,7 +23,8 @@ body {
     display: grid;
     grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-    margin: 3vh auto;
+    top: -7em;
+    margin: auto;
     width: 94vh;
     height: 94vh;
     border: 2px solid #000000;
@@ -70,6 +72,22 @@ body {
     background-color: #44aa44;
     border: 1px solid #77ff77;
     cursor: pointer;
+}
+
+.turn {
+    font-family: Arial, sans-serif;
+    font-size: 2em;
+    position: relative;
+    border-bottom: 1px solid #000000;
+    width: 6em;
+    /*left: 10em;*/
+}
+
+.reset {
+    position: relative;
+    top: 10em;
+    width: 5em;
+    height: 2em;
 }
 
 @keyframes blink {

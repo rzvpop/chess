@@ -19,9 +19,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ebd1cc71-bd59-4d10-83b8-ec9042668f98" name="Default Changelist" comment="should fix &quot;don't go in check&quot; bug (2)">
+    <list default="true" id="ebd1cc71-bd59-4d10-83b8-ec9042668f98" name="Default Changelist" comment="&quot;don't go in check&quot; bug fixed, local storage history in progress">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ChessPiece.js" beforeDir="false" afterPath="$PROJECT_DIR$/ChessPiece.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MoveContext.js" beforeDir="false" afterPath="$PROJECT_DIR$/MoveContext.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Table.js" beforeDir="false" afterPath="$PROJECT_DIR$/Table.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/main.js" afterDir="false" />
@@ -59,12 +58,12 @@
     <property name="nodejs_package_manager_path" value="npm" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\user\WebstormProjects\chess\iamges" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\user\WebstormProjects\chess" />
       <recent name="C:\Users\user\WebstormProjects\chess\context" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\user\WebstormProjects\chess\iamges" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -87,7 +86,8 @@
       <workItem from="1596089338382" duration="20440000" />
       <workItem from="1596175606480" duration="16865000" />
       <workItem from="1596434718590" duration="19773000" />
-      <workItem from="1596521550202" duration="18568000" />
+      <workItem from="1596521550202" duration="18863000" />
+      <workItem from="1596608302385" duration="13531000" />
     </task>
     <task id="LOCAL-00001" summary="added all types of pieces(basic), pawn logic(in progress), move alternatives highlight(in progress)">
       <created>1596028360888</created>
@@ -124,7 +124,14 @@
       <option name="project" value="LOCAL" />
       <updated>1596457290118</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="&quot;don't go in check&quot; bug fixed, local storage history in progress">
+      <created>1596543923436</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1596543923436</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -148,7 +155,8 @@
     <MESSAGE value="move context implemented for all pieces, check is buggy" />
     <MESSAGE value="fixed pawn first move bug, corrected check bug, refactored UI(added jquery), make king unable to move in check" />
     <MESSAGE value="should fix &quot;don't go in check&quot; bug (2)" />
-    <option name="LAST_COMMIT_MESSAGE" value="should fix &quot;don't go in check&quot; bug (2)" />
+    <MESSAGE value="&quot;don't go in check&quot; bug fixed, local storage history in progress" />
+    <option name="LAST_COMMIT_MESSAGE" value="&quot;don't go in check&quot; bug fixed, local storage history in progress" />
   </component>
   <component name="WindowStateProjectService">
     <state x="765" y="236" key="#com.intellij.ide.util.MemberChooser" timestamp="1596540215672">
@@ -163,10 +171,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="786" y="224" key="Github.UntrackedFilesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1595940268882" />
-    <state x="552" y="253" key="Vcs.Push.Dialog.v2" timestamp="1596457295302">
+    <state x="552" y="253" key="Vcs.Push.Dialog.v2" timestamp="1596543928031">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="552" y="253" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1596457295302" />
+    <state x="552" y="253" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1596543928031" />
     <state x="564" y="126" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1596452445265">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -175,9 +183,9 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="616" y="240" width="672" height="677" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1596540103237" />
-    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1596003517533">
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1596622950844">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1596003517533" />
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1596622950844" />
   </component>
 </project>

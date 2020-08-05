@@ -1,24 +1,41 @@
 class Table {
-    constructor(history) {
+    constructor() {
         this.table = null;
         this._pieces = [[null], [null], [null], [null], [null], [null], [null], [null], [null]];
         this._selected = null;
         this._moveHistory = {moves: [], turn: "white"};
-        this._rebuildLastSetup(history);
     }
 
+    /**
+     *
+     * @returns {{moves: [], turn: string}}
+     */
     get moveHistory() {
         return this._moveHistory;
     }
 
-    _rebuildLastSetup(history) {
-        if(typeof history !== "undefined") {
-            this._moveHistory.moves.forEach(move => {
-                this.movePiece(move.rowStart, move.columnStart, move.rowEnd, move.columnEnd);
-            });
-        }
+    /**
+     *
+     * @param history
+     */
+    set moveHistory(history) {
+        this._moveHistory = (typeof history !== "undefined") ? history : {moves: [], turn: "white"};
     }
 
+    /**
+     *
+     */
+    rebuildSetup() {
+        this._moveHistory.moves.forEach(move => {
+            const moved = this.movePiece(move.rowStart, move.columnStart, move.rowEnd, move.columnEnd);
+            if(moved) this._changeTurn();
+        });
+    }
+
+    /**
+     *
+     * @returns {null}
+     */
     get selected() {
         return this._selected;
     }
@@ -34,6 +51,10 @@ class Table {
         return $($(this.table).children()[8 * (row - 1) + (column - 1)]);
     }
 
+    /**
+     *
+     * @private
+     */
     _putSquares() {
         if (this.table !== null) {
             for (let i = 1; i <= 8; ++i) {
@@ -48,12 +69,28 @@ class Table {
                                 this._moveFlow(Math.floor(index / 8) + 1, index % 8 + 1);
                             }));
 
+                    // $(window).on('click', (event) => {
+                    //     if($(event.target).hasClass("square") || $(event.target).hasClass("piece")) {
+                    //         let index = $(event.target).index();
+                    //         if($(event.target).hasClass("piece"))
+                    //             index = $(event.target).parent().index();
+                    //
+                    //         this._moveFlow(Math.floor(index / 8) + 1, index % 8 + 1);
+                    //     }
+                    // });
+
                     this._pieces[i].push(null);
                 }
             }
         }
     }
 
+    /**
+     *
+     * @param row
+     * @param column
+     * @param piece
+     */
     addPiece(row, column, piece) {
         if (this._pieces[row][column] === null) {
             this._pieces[row][column] = piece;
@@ -61,6 +98,13 @@ class Table {
         }
     }
 
+    /**
+     *
+     * @param rowStart
+     * @param columnStart
+     * @param rowEnd
+     * @param columnEnd
+     */
     movePiece(rowStart, columnStart, rowEnd, columnEnd) {
         const piece = this._pieces[rowStart][columnStart];
         const endPiece = this._pieces[rowEnd][columnEnd];
@@ -90,13 +134,24 @@ class Table {
         }
     }
 
+    /**
+     *
+     * @param element
+     */
     generateTable(element) {
         this.table = $("<div/>").prependTo(element).addClass("chess-table");
         this._putSquares();
 
-        $("<div id='turn'/>").prependTo(element).html("<p>" + this._moveHistory.turn + "'s turn</p>")
+        $("<div id='turn'/>").prependTo(element).html("<p>" + this._moveHistory.turn + "'s turn</p>").addClass("turn");
     }
 
+    /**
+     *
+     * @param row
+     * @param column
+     * @returns {boolean}
+     * @private
+     */
     _chooseMove(row, column) {
         if (this._selected) {
             if (this._selected.moveSet.find(move => move.row === row && move.column === column && !move.isKing)) {
@@ -107,11 +162,21 @@ class Table {
         return false;
     }
 
+    /**
+     *
+     * @private
+     */
     _changeTurn() {
         this._moveHistory.turn = this._moveHistory.turn === "white" ? "black" : "white";
-        $("#turn").html("<p>" + this._moveHistory.turn + "'s turn</p>")
+        $("#turn").html("<p>" + this._moveHistory.turn + "'s turn</p>");
     }
 
+    /**
+     *
+     * @param row
+     * @param column
+     * @private
+     */
     // see alternatives, choose move, see if in check
     _moveFlow(row, column) {
         const $currentSquare = this._getSquareByCoordinates(row, column);
@@ -124,8 +189,8 @@ class Table {
                 const moved = this._chooseMove(row, column);
 
                 if(moved) {
-                    this._highlightCheck(row, column);
                     this._changeTurn();
+                    this._highlightCheck(row, column);
                 }
             }
 
@@ -136,6 +201,13 @@ class Table {
         }
     }
 
+    /**
+     *
+     * @param row
+     * @param column
+     * @param currentSquare
+     * @private
+     */
     _highlightAlternatives(row, column, currentSquare) {
         this._cleanHighlight();
         $(currentSquare).addClass("select-piece");
@@ -153,6 +225,10 @@ class Table {
         this._selected = {row: row, column: column, moveSet: moveSet};
     }
 
+    /**
+     *
+     * @private
+     */
     _highlightCheck() {
         let foundKing = false;
 
@@ -162,11 +238,9 @@ class Table {
                 if(piece !== null) {
                     const moveSet = piece.getMoveContext().generateAlternatives(this._pieces, i, j);
                     moveSet.forEach(move => {
-                        if(piece.color === this._moveHistory.turn) {
-                            if (move.isKing) {
-                                this._getSquareByCoordinates(move.row, move.column).addClass("check");
-                                foundKing = true;
-                            }
+                        if (move.isKing) {
+                            this._getSquareByCoordinates(move.row, move.column).addClass("check");
+                            foundKing = true;
                         }
                     });
                 }
@@ -177,6 +251,10 @@ class Table {
         }
     }
 
+    /**
+     *
+     * @private
+     */
     _cleanHighlight() {
         this.table.children().removeClass("select-piece");
         this.table.children().removeClass("move-alternative");

@@ -20,10 +20,10 @@ class PawnMoveContext extends MoveContext {
 
         if(this._validPosition(row + direction, column) && pieces[row + direction][column] === null)
         {
-            moveSet.push({row: row + direction, column: column});
+            moveSet.push({row: row + direction, column: column, noThreaten: true});
 
             if(!piece.firstDone && MoveContext._validPosition(row + direction * 2, column) && pieces[row + direction * 2][column] === null)
-                moveSet.push({row: row + direction * 2, column: column});
+                moveSet.push({row: row + direction * 2, column: column, noThreaten: true});
         }
 
         if(this._validPosition(row + direction, column - 1)) {
@@ -58,6 +58,7 @@ class PawnMoveContext extends MoveContext {
 
 //TODO: -king not to remain in check
 //      -refactor check checking
+//      -king can go in pwan check :-?
 /***
  * 'isKing' property applies only when there is an opponent king; it overrides 'canCapture'
  */
@@ -88,14 +89,19 @@ class KingMoveContext extends MoveContext {
 
             pieces[row][column] = null;
             let threatenedPositions = [];
-            for (let i = 1; i <= 8; ++i)
-                for (let j = 1; j <= 8; ++j) {
-                    const opponentPiece = pieces[i][j];
-                    if (opponentPiece !== null && opponentPiece.color !== piece.color && opponentPiece.constructor.name !== "King") {
-                        threatenedPositions = [...threatenedPositions, ...opponentPiece.getMoveContext().generateAlternatives(pieces, i, j)];
+            try {
+                for (let i = 1; i <= 8; ++i)
+                    for (let j = 1; j <= 8; ++j) {
+                        const opponentPiece = pieces[i][j];
+                        if (opponentPiece !== null && opponentPiece.color !== piece.color /* && opponentPiece.constructor.name !== "King" */) {
+                            threatenedPositions = [...threatenedPositions, ...opponentPiece.getMoveContext().generateAlternatives(pieces, i, j).filter(move => !move.noThreaten)];
 
+                        }
                     }
-                }
+            }
+            catch (e) {
+                console.log(e);
+            }
             pieces[row][column] = piece;
 
             moveSetWithCheck.forEach(move => {

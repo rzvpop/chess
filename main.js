@@ -1,4 +1,5 @@
 $(document).ready(function(){
+    const body = $("body");
     // const $startScreen = $("<div/>").prependTo($("body")).addClass("start-screen").html("5");
     // let cnt = 4;
     // const interval = setInterval(() => {
@@ -8,24 +9,39 @@ $(document).ready(function(){
     //     if(cnt === -1)
     //     {
     //         clearInterval(interval);
-            const table = setupTable(history);
+            let table = setupTable(body);
     //     }
     //
     // }, 1000);
 
-    $(window).on("unload", (event) => {
+    $(window).on("unload", () => {
         localStorage.moveHistory = JSON.stringify(table.moveHistory);
+    });
+
+    if(localStorage.moveHistory) {
+        table.moveHistory = JSON.parse(localStorage.moveHistory);
+        table.rebuildSetup();
+    }
+
+    $("<div id='undo'/>").prependTo(body).html("<button>Undo</button>").addClass("undo");
+    $("<div id='reset'/>").prependTo(body).html("<button>Reset</button>").addClass("reset");
+    body.on('click', (event) => {
+        const element = $(event.target).is("button") ? $(event.target) : null;
+        if(element) {
+            if (element.parent().attr("id") === "reset") {
+                table.moveHistory = {moves: [], turn: "white"};
+                table = setupTable(body);
+            }
+            else if (element.parent().attr("id") === "undo") {
+
+            }
+        }
     });
 });
 
-const setupTable = () => {
-    let history;
-    if(localStorage.moveHistory) {
-        history = JSON.parse(localStorage.moveHistory);
-    }
-
-    const table = new Table(history);
-    table.generateTable($("body"));
+const setupTable = (element) => {
+    const table = new Table();
+    table.generateTable(element);
 
     for(let i = 0; i < 8; ++i) {
         const pawnB = new Pawn("black");
