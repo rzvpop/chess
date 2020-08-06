@@ -111,15 +111,15 @@ const getGame = (id, table) => {
             method: "GET",
             url: "https://chess.thrive-dev.bitstoneint.com/wp-json/chess-api/game/" + id.toString(),
         }).done(res => {
-            // localStorage.noMoves = res.moves.length;
-            const gamesCreated = JSON.parse(localStorage.onlineGames);
-            if(gamesCreated.find(id))
+            // set an interval 
+			//put move
+            const gamesCreated = localStorage.onlineGames ? JSON.parse(localStorage.onlineGames) : [];
+            if(gamesCreated.includes(id))
                 table.canMove = res.moves.length % 2 === 0;
             else
                 table.canMove = res.moves.length % 2 !== 0;
 
             res.moves.forEach(move => {
-                console.log(move);
                 if(typeof move === "object" && move !== null && move.hasOwnProperty("from") && move.hasOwnProperty("to")) {
                     table.movePiece(Number.parseInt(move.from.x) + 1, Number.parseInt(move.from.y) + 1,
                                     Number.parseInt(move.to.x) + 1, Number.parseInt(move.to.y) + 1);
