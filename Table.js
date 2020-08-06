@@ -73,20 +73,20 @@ class Table {
                             .attr("data-j", j)
                             .css("grid-row", i + " / " + (i + 1))
                             .css("grid-column", j + " / " + (j + 1)));
-                            // .click((event) => {
-                            //     const index = $(event.currentTarget).index();
-                            //     if(this._gameMode === 0 || (this._gameMode === 1 && this._canMove))
-                            //         this._moveFlow(Math.floor(index / 8) + 1, index % 8 + 1);
-                            // }));
+                             .click((event) => {
+                                 const index = $(event.currentTarget).index();
+                                 if(this._gameMode === 0 || (this._gameMode === 1 && this._canMove))
+                                     this._moveFlow(Math.floor(index / 8) + 1, index % 8 + 1);
+                             }));
 
-                    $(window).on('click', ".square, .piece", (event) => {
+                    /*$(window).on('click', ".square, .piece", (event) => {
                         let index = $(event.target).index();
                         if($(event.target).hasClass("piece"))
                             index = $(event.target).parent().index();
 
                         if(this._gameMode === 0 || (this._gameMode === 1 && this._canMove))
                             this._moveFlow(Math.floor(index / 8) + 1, index % 8 + 1);
-                    });
+                    });*/
 
                     this._pieces[i].push(null);
                 }
