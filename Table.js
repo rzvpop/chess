@@ -1,9 +1,19 @@
 class Table {
-    constructor() {
+    constructor(gameMode) {
         this.table = null;
         this._pieces = [[null], [null], [null], [null], [null], [null], [null], [null], [null]];
         this._selected = null;
         this._moveHistory = {moves: [], turn: "white"};
+        this._gameMode = gameMode;
+        this._canMove = true;
+    }
+
+    /**
+     *
+     * @param value
+     */
+    set canMove(value) {
+        this._canMove = value;
     }
 
     /**
@@ -28,7 +38,6 @@ class Table {
     rebuildSetup() {
         this._moveHistory.moves.forEach(move => {
             const moved = this.movePiece(move.rowStart, move.columnStart, move.rowEnd, move.columnEnd);
-            if(moved) this._changeTurn();
         });
     }
 
@@ -63,21 +72,21 @@ class Table {
                             .attr("data-i", i)
                             .attr("data-j", j)
                             .css("grid-row", i + " / " + (i + 1))
-                            .css("grid-column", j + " / " + (j + 1))
-                            .click((event) => {
-                                const index = $(event.currentTarget).index();
-                                this._moveFlow(Math.floor(index / 8) + 1, index % 8 + 1);
-                            }));
+                            .css("grid-column", j + " / " + (j + 1)));
+                            // .click((event) => {
+                            //     const index = $(event.currentTarget).index();
+                            //     if(this._gameMode === 0 || (this._gameMode === 1 && this._canMove))
+                            //         this._moveFlow(Math.floor(index / 8) + 1, index % 8 + 1);
+                            // }));
 
-                    // $(window).on('click', (event) => {
-                    //     if($(event.target).hasClass("square") || $(event.target).hasClass("piece")) {
-                    //         let index = $(event.target).index();
-                    //         if($(event.target).hasClass("piece"))
-                    //             index = $(event.target).parent().index();
-                    //
-                    //         this._moveFlow(Math.floor(index / 8) + 1, index % 8 + 1);
-                    //     }
-                    // });
+                    $(window).on('click', ".square, .piece", (event) => {
+                        let index = $(event.target).index();
+                        if($(event.target).hasClass("piece"))
+                            index = $(event.target).parent().index();
+
+                        if(this._gameMode === 0 || (this._gameMode === 1 && this._canMove))
+                            this._moveFlow(Math.floor(index / 8) + 1, index % 8 + 1);
+                    });
 
                     this._pieces[i].push(null);
                 }
@@ -131,18 +140,21 @@ class Table {
 
             if(piece.constructor.name === "Pawn") piece.firstDone = true;
             this._moveHistory.moves.push({rowStart: rowStart, columnStart: columnStart, rowEnd: rowEnd, columnEnd: columnEnd});
+            this._changeTurn();
+            this._canMove = false;
         }
     }
 
     /**
      *
      * @param element
+     * @param menu
      */
-    generateTable(element) {
+    generateTable(element, menu) {
         this.table = $("<div/>").prependTo(element).addClass("chess-table");
         this._putSquares();
 
-        $("<div id='turn'/>").prependTo(element).html("<p>" + this._moveHistory.turn + "'s turn</p>").addClass("turn");
+        $("<div id='turn'/>").prependTo(menu).html("<p>" + (this._moveHistory.moves.length % 2 === 0 ? "white" : "black") + "'s turn</p>").addClass("turn");
     }
 
     /**
@@ -167,21 +179,19 @@ class Table {
      * @private
      */
     _changeTurn() {
-        this._moveHistory.turn = this._moveHistory.turn === "white" ? "black" : "white";
-        $("#turn").html("<p>" + this._moveHistory.turn + "'s turn</p>");
+        $("#turn").html("<p>" + (this._moveHistory.moves.length % 2 === 0 ? "white" : "black") + "'s turn</p>");
     }
 
     /**
-     *
+     * see alternatives / choose move / see if in check
      * @param row
      * @param column
      * @private
      */
-    // see alternatives, choose move, see if in check
     _moveFlow(row, column) {
         const $currentSquare = this._getSquareByCoordinates(row, column);
 
-        if ($currentSquare.children().length > 0 && !this._selected && this._pieces[row][column].color === this._moveHistory.turn) {
+        if ($currentSquare.children().length > 0 && !this._selected && this._pieces[row][column].color === (this._moveHistory.moves.length % 2 === 0 ? "white" : "black")) {
             this._highlightAlternatives(row, column, $currentSquare);
         }
         else {
@@ -189,7 +199,6 @@ class Table {
                 const moved = this._chooseMove(row, column);
 
                 if(moved) {
-                    this._changeTurn();
                     this._highlightCheck(row, column);
                 }
             }
