@@ -72,7 +72,7 @@ const setupGame = (gameMode, body, menu, gameId) => {
                             table = null;
 
                             let newTable = new Table(gameMode);
-                            newTable.moveHistory = {moves: [], turn: "white"};
+                            newTable.moveHistory = {moves: {created: []}, turn: "white"};
                             setupTable(newTable, element, menu);
                         } else if (element.parent().attr("id") === "undo") {
 
@@ -121,18 +121,16 @@ const updateGame = (id, table) => {
             method: "GET",
             url: "https://chess.thrive-dev.bitstoneint.com/wp-json/chess-api/game/" + id.toString(),
         }).done(res => {
-            const gamesCreated = localStorage.onlineGames ? JSON.parse(localStorage.onlineGames) : [];
-            if(gamesCreated.includes(id))
+            const onlineGames = localStorage.onlineGames ? JSON.parse(localStorage.onlineGames) : {created: []};
+            if(onlineGames.created.includes(id))
                 table.canMove = res.moves.length % 2 === 0;
             else
                 table.canMove = res.moves.length % 2 !== 0;
 
-            if(table.canMove) {
-                const lastMove = res.moves[res.moves.length - 1];
-                if (typeof lastMove === "object" && lastMove !== null && lastMove.hasOwnProperty("from") && lastMove.hasOwnProperty("to")) {
-                    table.movePiece(Number.parseInt(lastMove.from.x) + 1, Number.parseInt(lastMove.from.y) + 1,
-                        Number.parseInt(lastMove.to.x) + 1, Number.parseInt(lastMove.to.y) + 1);
-                }
+            const lastMove = res.moves[res.moves.length - 1];
+            if (typeof lastMove === "object" && lastMove !== null && lastMove.hasOwnProperty("from") && lastMove.hasOwnProperty("to")) {
+                table.movePiece(Number.parseInt(lastMove.from.x) + 1, Number.parseInt(lastMove.from.y) + 1,
+                    Number.parseInt(lastMove.to.x) + 1, Number.parseInt(lastMove.to.y) + 1);
             }
         });
     }
@@ -144,8 +142,8 @@ const getGame = (id, table) => {
             method: "GET",
             url: "https://chess.thrive-dev.bitstoneint.com/wp-json/chess-api/game/" + id.toString(),
         }).done(res => {
-            const gamesCreated = localStorage.onlineGames ? JSON.parse(localStorage.onlineGames) : [];
-            if(gamesCreated.includes(id))
+            const onlineGames = localStorage.onlineGames ? JSON.parse(localStorage.onlineGames) : {created: []};
+            if(onlineGames.created.includes(id))
                 table._canMove = res.moves.length % 2 === 0;
             else
                 table._canMove = res.moves.length % 2 !== 0;
@@ -167,13 +165,13 @@ const createGame = (gameList, name) => {
         url: "https://chess.thrive-dev.bitstoneint.com/wp-json/chess-api/game",
         data: {name: name}
     }).done(res => {
-        if(!localStorage.createdGames) {
-            localStorage.onlineGames = "{created: [" + res.ID + "]}";
+        if(!localStorage.onlineGames) {
+            localStorage.onlineGames = JSON.stringify({created: [res.ID]});
         }
         else {
-            const gamesCreated = JSON.parse(localStorage.onlineGames);
-            gamesCreated.push(res.ID);
-            localStorage.onlineGames = JSON.stringify(gamesCreated);
+            const onlineGames = JSON.parse(localStorage.onlineGames);
+            onlineGames.created.push(res.ID);
+            localStorage.onlineGames = JSON.stringify(onlineGames);
         }
 
         getAllGames(gameList);
