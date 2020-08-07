@@ -19,11 +19,10 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ebd1cc71-bd59-4d10-83b8-ec9042668f98" name="Default Changelist" comment="some bugs fixed, reset in progress, ajax make moves in progress">
+    <list default="true" id="ebd1cc71-bd59-4d10-83b8-ec9042668f98" name="Default Changelist" comment="online game in progress, moving square click on window">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Table.js" beforeDir="false" afterPath="$PROJECT_DIR$/Table.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/style.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -88,7 +87,8 @@
       <workItem from="1596434718590" duration="19773000" />
       <workItem from="1596521550202" duration="18863000" />
       <workItem from="1596608302385" duration="16050000" />
-      <workItem from="1596694262802" duration="19230000" />
+      <workItem from="1596694262802" duration="19447000" />
+      <workItem from="1596823759426" duration="3508000" />
     </task>
     <task id="LOCAL-00001" summary="added all types of pieces(basic), pawn logic(in progress), move alternatives highlight(in progress)">
       <created>1596028360888</created>
@@ -146,7 +146,21 @@
       <option name="project" value="LOCAL" />
       <updated>1596629982329</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="online game in progress">
+      <created>1596758883029</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1596758883029</updated>
+    </task>
+    <task id="LOCAL-00010" summary="online game in progress, moving square click on window">
+      <created>1596759000144</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1596759000144</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -173,7 +187,9 @@
     <MESSAGE value="&quot;don't go in check&quot; bug fixed, local storage history in progress" />
     <MESSAGE value="some bugs fixed, reset in progress" />
     <MESSAGE value="some bugs fixed, reset in progress, ajax make moves in progress" />
-    <option name="LAST_COMMIT_MESSAGE" value="some bugs fixed, reset in progress, ajax make moves in progress" />
+    <MESSAGE value="online game in progress" />
+    <MESSAGE value="online game in progress, moving square click on window" />
+    <option name="LAST_COMMIT_MESSAGE" value="online game in progress, moving square click on window" />
   </component>
   <component name="WindowStateProjectService">
     <state x="765" y="236" key="#com.intellij.ide.util.MemberChooser" timestamp="1596756068944">
@@ -188,10 +204,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="786" y="224" key="Github.UntrackedFilesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1595940268882" />
-    <state x="552" y="253" key="Vcs.Push.Dialog.v2" timestamp="1596629985666">
+    <state x="552" y="253" key="Vcs.Push.Dialog.v2" timestamp="1596759003694">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="552" y="253" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1596629985666" />
+    <state x="552" y="253" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1596759003694" />
     <state x="564" y="126" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1596452445265">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

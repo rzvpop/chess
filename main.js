@@ -49,7 +49,7 @@ const setupGame = (gameMode, body, menu, gameId) => {
             clearInterval(interval);
             $startScreen.remove();
 
-            let table = new Table(gameMode);
+            let table = new Table(gameMode, gameId);
             setupTable(table, body, menu, gameMode);
 
             if(gameMode === 0) {
@@ -84,7 +84,7 @@ const setupGame = (gameMode, body, menu, gameId) => {
                 getGame(gameId, table);
 
                 const interval = setInterval(() => {
-
+                    updateGame(gameId, table);
                 }, 1000);
             }
         }
@@ -105,34 +105,58 @@ const getAllGames = gameList => {
     });
 };
 
-const getGame = (id, table) => {
+const sendMoveToServer = (move, id) => {
+    $.ajax({
+        method: "PUT",
+        url: "https://chess.thrive-dev.bitstoneint.com/wp-json/chess-api/game/" + id.toString(),
+        data: {move: {from: {x: move.rowStart - 1, y: move.columnStart - 1}, to: {x: move.rowEnd - 1, y: move.columnEnd - 1}}}
+    }).done(res => {
+        console.log("sendMoveToServer: " + res);
+    });
+}
+
+const updateGame = (id, table) => {
     if(Number.isInteger(id)) {
         $.ajax({
             method: "GET",
             url: "https://chess.thrive-dev.bitstoneint.com/wp-json/chess-api/game/" + id.toString(),
         }).done(res => {
-            // set an interval 
-			//put move
             const gamesCreated = localStorage.onlineGames ? JSON.parse(localStorage.onlineGames) : [];
             if(gamesCreated.includes(id))
                 table.canMove = res.moves.length % 2 === 0;
             else
                 table.canMove = res.moves.length % 2 !== 0;
 
+            if(table.canMove) {
+                const lastMove = res.moves[res.moves.length - 1];
+                if (typeof lastMove === "object" && lastMove !== null && lastMove.hasOwnProperty("from") && lastMove.hasOwnProperty("to")) {
+                    table.movePiece(Number.parseInt(lastMove.from.x) + 1, Number.parseInt(lastMove.from.y) + 1,
+                        Number.parseInt(lastMove.to.x) + 1, Number.parseInt(lastMove.to.y) + 1);
+                }
+            }
+        });
+    }
+};
+
+const getGame = (id, table) => {
+    if(Number.isInteger(id)) {
+        $.ajax({
+            method: "GET",
+            url: "https://chess.thrive-dev.bitstoneint.com/wp-json/chess-api/game/" + id.toString(),
+        }).done(res => {
+            const gamesCreated = localStorage.onlineGames ? JSON.parse(localStorage.onlineGames) : [];
+            if(gamesCreated.includes(id))
+                table._canMove = res.moves.length % 2 === 0;
+            else
+                table._canMove = res.moves.length % 2 !== 0;
+
+            res.moves = res.moves === "" ? [] : res.moves;
             res.moves.forEach(move => {
                 if(typeof move === "object" && move !== null && move.hasOwnProperty("from") && move.hasOwnProperty("to")) {
                     table.movePiece(Number.parseInt(move.from.x) + 1, Number.parseInt(move.from.y) + 1,
                                     Number.parseInt(move.to.x) + 1, Number.parseInt(move.to.y) + 1);
                 }
             });
-        });
-    }
-    else {
-        $.ajax({
-            method: "GET",
-            url: "https://chess.thrive-dev.bitstoneint.com/wp-json/chess-api/game",
-        }).done(res => {
-            console.log(res);
         });
     }
 };
@@ -154,12 +178,12 @@ const createGame = (gameList, name) => {
 
         getAllGames(gameList);
     }).fail(err => {
-        console.log("oopaaa");
+        console.log("Create game: " + err);
     });
 }
 
 const setupTable = (table, element, menu) => {
-    table.generateTable(element, menu);
+    table.generateTable(element, menu, sendMoveToServer);
 
     for(let i = 0; i < 8; ++i) {
         const pawnB = new Pawn("black");

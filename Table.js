@@ -1,11 +1,12 @@
 class Table {
-    constructor(gameMode) {
+    constructor(gameMode, gameId) {
         this.table = null;
         this._pieces = [[null], [null], [null], [null], [null], [null], [null], [null], [null]];
         this._selected = null;
         this._moveHistory = {moves: [], turn: "white"};
         this._gameMode = gameMode;
         this._canMove = true;
+        this._gameId = gameId;
     }
 
     /**
@@ -64,7 +65,7 @@ class Table {
      *
      * @private
      */
-    _putSquares() {
+    _putSquares(sendHandler) {
         if (this.table !== null) {
             for (let i = 1; i <= 8; ++i) {
                 for (let j = 1; j <= 8; ++j) {
@@ -72,11 +73,17 @@ class Table {
                             .attr("data-i", i)
                             .attr("data-j", j)
                             .css("grid-row", i + " / " + (i + 1))
-                            .css("grid-column", j + " / " + (j + 1)));
+                            .css("grid-column", j + " / " + (j + 1))
                              .click((event) => {
                                  const index = $(event.currentTarget).index();
-                                 if(this._gameMode === 0 || (this._gameMode === 1 && this._canMove))
-                                     this._moveFlow(Math.floor(index / 8) + 1, index % 8 + 1);
+                                 if(this._gameMode === 0 || (this._gameMode === 1 && this._canMove)) {
+                                     const moved = this._moveFlow(Math.floor(index / 8) + 1, index % 8 + 1);
+                                     if((this._gameMode === 1 && this._canMove && moved)) {
+                                         this._canMove = false;
+                                         sendHandler(this._moveHistory.moves[this._moveHistory.moves.length - 1], this._gameId);
+                                     }
+                                 }
+
                              }));
 
                     /*$(window).on('click', ".square, .piece", (event) => {
@@ -141,7 +148,6 @@ class Table {
             if(piece.constructor.name === "Pawn") piece.firstDone = true;
             this._moveHistory.moves.push({rowStart: rowStart, columnStart: columnStart, rowEnd: rowEnd, columnEnd: columnEnd});
             this._changeTurn();
-            this._canMove = false;
         }
     }
 
@@ -149,10 +155,11 @@ class Table {
      *
      * @param element
      * @param menu
+     * @param sendHandler
      */
-    generateTable(element, menu) {
+    generateTable(element, menu, sendHandler) {
         this.table = $("<div/>").prependTo(element).addClass("chess-table");
-        this._putSquares();
+        this._putSquares(sendHandler);
 
         $("<div id='turn'/>").prependTo(menu).html("<p>" + (this._moveHistory.moves.length % 2 === 0 ? "white" : "black") + "'s turn</p>").addClass("turn");
     }
@@ -191,12 +198,13 @@ class Table {
     _moveFlow(row, column) {
         const $currentSquare = this._getSquareByCoordinates(row, column);
 
+        let moved = false;
         if ($currentSquare.children().length > 0 && !this._selected && this._pieces[row][column].color === (this._moveHistory.moves.length % 2 === 0 ? "white" : "black")) {
             this._highlightAlternatives(row, column, $currentSquare);
         }
         else {
             if(this._selected && (row !== this._selected.row || column !== this._selected.column)) {
-                const moved = this._chooseMove(row, column);
+                moved = this._chooseMove(row, column);
 
                 if(moved) {
                     this._highlightCheck(row, column);
@@ -208,6 +216,8 @@ class Table {
                 this._selected = null;
             }
         }
+
+        return moved;
     }
 
     /**
