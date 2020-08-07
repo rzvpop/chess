@@ -1,31 +1,109 @@
 $(document).ready(function(){
     const body = $("body");
-    // const $startScreen = $("<div/>").prependTo($("body")).addClass("start-screen").html("5");
-    // let cnt = 4;
-    // const interval = setInterval(() => {
-    //
-    //     $startScreen.removeClass("start-screen").addClass("start-screen").html((cnt--).toString());
-    //
-    //     if(cnt === -1)
-    //     {
-    //         clearInterval(interval);
-            const table = new Table();
-            setupTable(table, body);
-    //     }
-    //
-    // }, 1000);
+    const menu = $("<div id='menu'>").prependTo(body).addClass("menu");
 
-    $(window).on("unload", () => {
-        localStorage.moveHistory = JSON.stringify(table.moveHistory);
-    });
+    const local = $("<div id='local'/>").prependTo(body).html("<button>Local game</button>").addClass("game-mode")
+        .on("click", () => {
+            local.remove();
+            online.remove();
 
-    if(localStorage.moveHistory) {
-        table.moveHistory = JSON.parse(localStorage.moveHistory);
-        table.rebuildSetup();
-    }
+            setupGame(0, body, menu)
+        });
 
-    // getGame(6, table);
+    const online = $("<div id='online'/>").prependTo(body).html("<button>Online game</button>").addClass("game-mode")
+        .on("click", () => {
+            local.remove();
+            online.remove();
+
+            const onlineGame = $("<div id='online-game'/>").prependTo(body);
+            const gameList = $("<div id='room-choose'/>").prependTo(onlineGame).html("<p>Choose game</p>").addClass("room-choose").
+                on("click", event => {
+                    const listItem = $(event.target).is("li") ? $(event.target) : null;
+                    if (listItem) {
+                        onlineGame.remove();
+
+                        setupGame(1, body, menu, Number.parseInt(listItem.attr("id")));
+                    }
+                });
+            getAllGames(gameList);
+
+            const roomCreate = $("<div id='room-create'/>").prependTo(onlineGame).html("<input type='text' placeholder='Choose a name'> <button>Create online game</button>").addClass("room-create")
+                .on("click", event => {
+                    const element = $(event.target).is("button") ? $(event.target) : null;
+                    if (element) {
+                        createGame(gameList, element.parent().children("input").val());
+                    }
+                });
+        });
 });
+
+const setupGame = (gameMode, body, menu, gameId) => {
+    let $startScreen = $("<div/>").prependTo(body).addClass("start-screen").html("<p>5</p>");
+    let cnt = 4;
+    const interval = setInterval(() => {
+
+       $startScreen.remove();
+       $startScreen = $("<div/>").prependTo(body).addClass("start-screen").html("<p>" + (cnt--) + "</p>");
+
+        if(cnt === -1) {
+            clearInterval(interval);
+            $startScreen.remove();
+
+            let table = new Table(gameMode);
+            setupTable(table, body, menu, gameMode);
+
+            if(gameMode === 0) {
+                $(window).on("unload", () => {
+                    localStorage.moveHistory = JSON.stringify(table.moveHistory);
+                });
+
+                if(localStorage.moveHistory) {
+                    table.moveHistory = JSON.parse(localStorage.moveHistory);
+                    table.rebuildSetup();
+                }
+
+                $("<div id='undo'/>").prependTo(menu).html("<button>Undo</button>").addClass("undo");
+                $("<div id='reset'/>").prependTo(menu).html("<button>Reset</button>").addClass("reset");
+                body.on("click", (event) => {
+                    const element = $(event.target).is("button") ? $(event.target) : null;
+                    if (element) {
+                        if (element.parent().attr("id") === "reset") {
+                            table.table.remove();
+                            table = null;
+
+                            let newTable = new Table(gameMode);
+                            newTable.moveHistory = {moves: [], turn: "white"};
+                            setupTable(newTable, element, menu);
+                        } else if (element.parent().attr("id") === "undo") {
+
+                        }
+                    }
+                });
+            }
+            else {
+                getGame(gameId, table);
+
+                const interval = setInterval(() => {
+
+                }, 1000);
+            }
+        }
+
+    }, 300);
+}
+
+const getAllGames = gameList => {
+    $.ajax({
+        method: "GET",
+        url: "https://chess.thrive-dev.bitstoneint.com/wp-json/chess-api/game",
+    }).done(res => {
+        const list = $("<ul/>");
+        res.forEach(game => {
+            list.append($("<li>" + game.ID + ": " + game.post_title + "</li>").attr("id", game.ID.toString()));
+        });
+        $(gameList).append(list);
+    });
+};
 
 const getGame = (id, table) => {
     if(Number.isInteger(id)) {
@@ -33,9 +111,18 @@ const getGame = (id, table) => {
             method: "GET",
             url: "https://chess.thrive-dev.bitstoneint.com/wp-json/chess-api/game/" + id.toString(),
         }).done(res => {
+            // localStorage.noMoves = res.moves.length;
+            const gamesCreated = JSON.parse(localStorage.onlineGames);
+            if(gamesCreated.find(id))
+                table.canMove = res.moves.length % 2 === 0;
+            else
+                table.canMove = res.moves.length % 2 !== 0;
+
             res.moves.forEach(move => {
+                console.log(move);
                 if(typeof move === "object" && move !== null && move.hasOwnProperty("from") && move.hasOwnProperty("to")) {
-                    table.movePiece(Number.parseInt(move.from.x), Number.parseInt(move.from.y), Number.parseInt(move.to.x), Number.parseInt(move.to.y));
+                    table.movePiece(Number.parseInt(move.from.x) + 1, Number.parseInt(move.from.y) + 1,
+                                    Number.parseInt(move.to.x) + 1, Number.parseInt(move.to.y) + 1);
                 }
             });
         });
@@ -50,8 +137,29 @@ const getGame = (id, table) => {
     }
 };
 
-const setupTable = (table, element) => {
-    table.generateTable(element);
+const createGame = (gameList, name) => {
+    $.ajax({
+        method: "POST",
+        url: "https://chess.thrive-dev.bitstoneint.com/wp-json/chess-api/game",
+        data: {name: name}
+    }).done(res => {
+        if(!localStorage.createdGames) {
+            localStorage.onlineGames = "{created: [" + res.ID + "]}";
+        }
+        else {
+            const gamesCreated = JSON.parse(localStorage.onlineGames);
+            gamesCreated.push(res.ID);
+            localStorage.onlineGames = JSON.stringify(gamesCreated);
+        }
+
+        getAllGames(gameList);
+    }).fail(err => {
+        console.log("oopaaa");
+    });
+}
+
+const setupTable = (table, element, menu) => {
+    table.generateTable(element, menu);
 
     for(let i = 0; i < 8; ++i) {
         const pawnB = new Pawn("black");
@@ -97,21 +205,4 @@ const setupTable = (table, element) => {
     table.addPiece(1, 1, rookW1)
     const rookW2 = new Rook("white");
     table.addPiece(1, 8, rookW2);
-
-    $("<div id='undo'/>").prependTo(element).html("<button>Undo</button>").addClass("undo");
-    $("<div id='reset'/>").prependTo(element).html("<button>Reset</button>").addClass("reset");
-    element.on('click', (event) => {
-        const element = $(event.target).is("button") ? $(event.target) : null;
-        if(element) {
-            if (element.parent().attr("id") === "reset") {
-                table.moveHistory = {moves: [], turn: "white"};
-                table = setupTable(table, element);
-            }
-            else if (element.parent().attr("id") === "undo") {
-
-            }
-        }
-    });
-
-    return table;
 };

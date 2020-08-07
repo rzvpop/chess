@@ -15,7 +15,61 @@ body {
     font-size: 10em;
     color: rgba(0, 0, 0, 0);
     z-index: 1;
-    animation: blink 1s;
+    animation: blink 0.3s;
+}
+
+.start-screen p {
+    position: relative;
+    top: 1em;
+}
+
+.room-create {
+    margin: auto;
+    position: relative;
+    top: 10em;
+    width: 30vw;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+button {
+    cursor: pointer;
+}
+
+.room-choose {
+    position: relative;
+    top: 20em;
+    width: 30vw;
+    margin: auto;
+}
+
+.room-choose ul {
+    list-style-type: none;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    height: 30em;
+}
+
+.room-choose ul li{
+    cursor: pointer;
+}
+
+.room-choose ul li:hover{
+    background-color: #aaaaaa;
+}
+
+.room-create input, .room-create button {
+    font-size: inherit;
+    height: 5vh;
+    border: 1px solid rgba(0, 0, 0, 0.4);
+    border-radius: 0;
+    outline: 0;
+    box-sizing: content-box;
+}
+
+.room-create input {
+    width: 66%;
 }
 
 .chess-table {
@@ -23,7 +77,8 @@ body {
     display: grid;
     grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-    /*top: -7em;*/
+    top: 2em;
+    left: 10em;
     margin: auto;
     width: 94vh;
     height: 94vh;
@@ -74,26 +129,32 @@ body {
     cursor: pointer;
 }
 
+/* menu section */
+
+.menu {
+    position: absolute;
+    top: 2em;
+    display: flex;
+    flex-direction: column;
+}
+
+.menu div {
+    margin-bottom: 10px;
+}
+
 .turn {
     font-family: Arial, sans-serif;
     font-size: 2em;
-    position: absolute;
     border-bottom: 1px solid #000000;
     width: 6em;
-    top: 2em;
-    /*left: 10em;*/
 }
 
 .reset {
-    position: absolute;
-    top: 12em;
     width: 5em;
     height: 2em;
 }
 
 .undo {
-    position: absolute;
-    top: 15em;
     width: 5em;
     height: 2em;
 }
